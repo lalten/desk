@@ -4,8 +4,8 @@
 #include <BlynkSimpleEsp8266_SSL.h>
 
 // Pin definitions of NodeMCU's builtin LEDs
-const int pin_led_up = D0; // red
-const int pin_led_down = D4; // blue
+const int pin_led_red = D0; // red
+const int pin_led_blu = D4; // blue
 
 BlynkTimer timer;
 
@@ -23,8 +23,7 @@ void vibrate()
   output_state = !output_state;
 
   // Send it out
-  digitalWrite(pin_led_up, output_state);
-  digitalWrite(pin_led_down, !output_state);
+  digitalWrite(pin_led_red, LOW); // red led on
 
   BLYNK_LOG("num_vibrations = %d", num_vibrations);
 
@@ -41,8 +40,7 @@ void vibrate()
 
 void turn_off()
 {
-  digitalWrite(pin_led_up, LOW);
-  digitalWrite(pin_led_down, LOW);
+  digitalWrite(pin_led_red, HIGH); // red led off
 }
 
 // Write a value to virtual pin V1 to make Desk motor
@@ -64,8 +62,9 @@ BLYNK_WRITE(V2)
 
 void setup()
 {
-  pinMode(pin_led_up, OUTPUT);
-  pinMode(pin_led_down, OUTPUT);
+  pinMode(pin_led_red, OUTPUT);
+  pinMode(pin_led_blu, OUTPUT);
+
   turn_off();
   
   Serial.begin(115200);
@@ -77,5 +76,6 @@ void loop()
 {
   Blynk.run();
   timer.run(); // Initiates BlynkTimer
+  digitalWrite(pin_led_blu, !Blynk.connected()); // blue led shows connection state (on is low)
 }
 
