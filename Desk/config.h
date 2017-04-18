@@ -12,3 +12,8 @@
 
 // Optional, this enables more detailed prints
 //#define BLYNK_DEBUG
+
+// Connection to Pololu G2 motor driver
+#define PIN_DIR D5
+#define PIN_PWM D6
+#define PIN_SLP D7

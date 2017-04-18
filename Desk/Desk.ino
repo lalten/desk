@@ -6,6 +6,10 @@
 // Pin definitions of NodeMCU's builtin LEDs
 const int pin_led_red = D0; // red
 const int pin_led_blu = D4; // blue
+const int pin_pwm = PIN_PWM;
+const int pin_dir = PIN_DIR;
+const int pin_slp = PIN_SLP;
+
 
 BlynkTimer timer;
 
@@ -21,8 +25,11 @@ void vibrate()
 
   // change up/down
   output_state = !output_state;
+  digitalWrite(pin_dir, output_state);
 
   // Send it out
+  digitalWrite(pin_slp, HIGH); // enable motor driver
+  digitalWrite(pin_pwm, HIGH); // note that the desk uses relays to operate the motor, so PWM wouldn't work
   digitalWrite(pin_led_red, LOW); // red led on
 
   BLYNK_LOG("num_vibrations = %d", num_vibrations);
@@ -41,6 +48,9 @@ void vibrate()
 void turn_off()
 {
   digitalWrite(pin_led_red, HIGH); // red led off
+  digitalWrite(pin_pwm, LOW);
+  digitalWrite(pin_dir, LOW);
+  digitalWrite(pin_slp, LOW);
 }
 
 // Write a value to virtual pin V1 to make Desk motor
@@ -64,6 +74,9 @@ void setup()
 {
   pinMode(pin_led_red, OUTPUT);
   pinMode(pin_led_blu, OUTPUT);
+  pinMode(pin_pwm, OUTPUT);
+  pinMode(pin_dir, OUTPUT);
+  pinMode(pin_slp, OUTPUT);
 
   turn_off();
   
